@@ -1,6 +1,7 @@
 const path = require('path')
 const express = require('express');
 const hbs = require('hbs')
+const port = process.env.PORT || 8000
 const app = express();
 const geocode = require('./utils/geocode')
 const forecast = require('./utils/forecast')
@@ -40,19 +41,18 @@ app.get("/help", (req, res) => {
 })
 
 app.get("/weather", (req, res) => {
-    if(!req.query.address)
-    {
+    if (!req.query.address) {
         return res.send({
-            error:'address is mandatory'
+            error: 'address is mandatory'
         })
     }
-    geocode(req.query.address,(error,{latitude,longitude,location})=>{
-        
-        
-        forecast(latitude,longitude,(error,forecastData)=>{
+    geocode(req.query.address, (error, { latitude, longitude, location }) => {
+
+
+        forecast(latitude, longitude, (error, forecastData) => {
             console.log(forecastData)
             res.send({
-                forecast:forecastData,
+                forecast: forecastData,
                 location
             })
         })
@@ -83,6 +83,6 @@ app.get("*", (req, res) => {
     })
 })
 
-app.listen(8000, () => {
+app.listen(port, () => {
     console.log("server is up on port 8000")
 })
